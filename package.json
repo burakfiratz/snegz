@@ -1,0 +1,24 @@
+{
+  "name": "snegz",
+  "version": "1.0.0",
+  "description": "SQLite Nodejs Express\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001bJS\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[DGraphQL stack project\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C shopping project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sqlite",
+    "nodejs",
+    "express",
+    "graphql"
+  ],
+  "author": "Burak FIRAT",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.0.1",
+    "sqlite": "^4.0.23"
+  }
+}
