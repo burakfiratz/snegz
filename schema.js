@@ -1,14 +1,13 @@
 const {GraphQLSchema, GraphQLObjectType, GraphQLInt, GraphQLString} = require("graphql");
 
+const connection = require('./db/dao');
 
 let userType = new GraphQLObjectType({
     name: 'User',
     fields: {
         id: {type: GraphQLInt},
         username: {type: GraphQLString},
-        email: {type: GraphQLString},
-        name: {type: GraphQLString},
-        surname: {type: GraphQLString}
+        email: {type: GraphQLString}
     }
 });
 
@@ -21,13 +20,7 @@ var queryType = new GraphQLObjectType({
             resolve: () => {
                 return "Hello World!";
             }
-        }
-    }
-});
-
-var mutationType = new GraphQLObjectType({
-    name: 'Mutation',
-    fields: {
+        },
         getUser: {
             type: userType,
             args: {
@@ -35,6 +28,24 @@ var mutationType = new GraphQLObjectType({
             },
             resolve: async (_) => {
                 //TODO: sqlite db query
+            }
+        },
+    }
+});
+
+var mutationType = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+
+        setUser: {
+            type: userType,
+            args: {
+                username: {type: GraphQLString},
+                email: {type: GraphQLString}
+            },
+            resolve: async (_, args) => {
+                await connection.query('INSERT INTO users (username, email) VALUES (?,?);', [args.username, args.email]);
+
             }
         },
     }
