@@ -1,4 +1,4 @@
-const {GraphQLSchema, GraphQLObjectType, GraphQLInt, GraphQLString} = require("graphql");
+const {GraphQLSchema, GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLFloat} = require("graphql");
 
 const connection = require('./db/dao');
 
@@ -8,6 +8,20 @@ let userType = new GraphQLObjectType({
         id: {type: GraphQLInt},
         username: {type: GraphQLString},
         email: {type: GraphQLString}
+    }
+});
+
+let productType = new GraphQLObjectType({
+    name: 'Product',
+    fields: {
+        id: {type: GraphQLInt},
+        name: {type: GraphQLString},
+        description: {type: GraphQLString},
+        price: {type: GraphQLFloat},
+        stock: {type: GraphQLInt},
+        created_at: {type: GraphQLString},
+        modified_at: {type: GraphQLString},
+        deleted_at: {type: GraphQLString},
     }
 });
 
@@ -35,7 +49,7 @@ var queryType = new GraphQLObjectType({
 
 var mutationType = new GraphQLObjectType({
     name: 'Mutation',
-    fields: {
+    fields: () => ({
 
         setUser: {
             type: userType,
@@ -44,11 +58,24 @@ var mutationType = new GraphQLObjectType({
                 email: {type: GraphQLString}
             },
             resolve: async (_, args) => {
-                await connection.query('INSERT INTO users (username, email) VALUES (?,?);', [args.username, args.email]);
-
+                await connection.query('INSERT INTO users (username, email) VALUES (?,?)', [args.username, args.email]);
             }
         },
-    }
+        setProduct: {
+            type: productType,
+            args: {
+                user_id: {type: GraphQLInt},
+                name: {type: GraphQLString},
+                description: {type: GraphQLString},
+                price: {type: GraphQLFloat},
+                stock: {type: GraphQLInt}
+            },
+            resolve: async (_, args) => {
+                await connection.query('INSERT INTO products (user_id, name, description, price, stock) VALUES (?,?,?,?,?)',
+                    [args.user_id, args.name, args.description, args.price, args.stock]);
+            }
+        }
+    })
 })
 
 
