@@ -2,17 +2,9 @@ const {GraphQLSchema, GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLFloat
 
 const connection = require('./db/dao');
 
-const User = require("./entity/user");
 const Product = require("./entity/product");
 
-let userType = new GraphQLObjectType({
-    name: 'User',
-    fields: () => ({
-        id: {type: GraphQLInt},
-        username: {type: GraphQLString},
-        email: {type: GraphQLString}
-    })
-});
+const {userQueries, userMutations} = require('./graphql/user');
 
 let productType = new GraphQLObjectType({
     name: 'Product',
@@ -38,17 +30,6 @@ var queryType = new GraphQLObjectType({
                 return "Hello World!";
             }
         },
-        getUser: {
-            type: userType,
-            args: {
-                id: {type: GraphQLInt}
-            },
-            resolve: async (_, args) => {
-                return await connection.get('SELECT * FROM users WHERE id=?', [args.id]).then(async result => {
-                    return new User(result);
-                });
-            }
-        },
         getProduct: {
             type: productType,
             args: {
@@ -59,30 +40,14 @@ var queryType = new GraphQLObjectType({
                     return new Product(result)
                 });
             }
-        }
+        },
+        ...userQueries
     }
 });
 
 var mutationType = new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
-        setUser: {
-            type: userType,
-            args: {
-                username: {type: GraphQLString},
-                email: {type: GraphQLString}
-            },
-            resolve: async (_, args) => {
-                return await connection.run('INSERT INTO users (username, email) VALUES (?,?)', [args.username, args.email]).then(async result => {
-                    console.log(result.lastID);
-                    return await connection.get('SELECT * FROM users WHERE id=?', [result.lastID]).then(result => {
-                        console.log(result);
-                        console.log(new User(result));
-                        return new User(result);
-                    });
-                });
-            }
-        },
         setProduct: {
             type: productType,
             args: {
@@ -101,7 +66,8 @@ var mutationType = new GraphQLObjectType({
                     });
                 });
             }
-        }
+        },
+        ...userMutations
     })
 })
 
