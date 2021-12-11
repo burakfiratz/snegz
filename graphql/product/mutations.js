@@ -1,6 +1,6 @@
 const {GraphQLInt, GraphQLString, GraphQLFloat} = require("graphql");
-const connection = require("./../../db/dao");
 const Product = require("../../controllers/product");
+const ProductModel = new (require("../../models/product"));
 const productType = require("./typedef");
 
 const productMutations = {
@@ -14,13 +14,13 @@ const productMutations = {
             stock: {type: GraphQLInt}
         },
         resolve: async (_, args) => {
-            return await connection.run('INSERT INTO products (user_id, name, description, price, stock) VALUES (?,?,?,?,?)',
-                [args.user_id, args.name, args.description, args.price, args.stock]).then(async result => {
-                console.log(result.lastID);
-                return await connection.get('SELECT * FROM products WHERE id=?', [result.lastID]).then(result => {
-                    return new Product(result)
+            return await ProductModel.setProduct(args)
+                .then((res) => {
+                    return new Product(res);
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
-            });
         }
     },
 }

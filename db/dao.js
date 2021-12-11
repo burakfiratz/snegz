@@ -11,7 +11,7 @@ class Database {
         //changes for successful update, delete processes
         return new Promise((resolve, reject) => {
             let statement = this.connection.prepare(sql, args).run((err) => {
-                if (err) return reject(err);
+                if (err) return reject(new Error("Unexpected error triggered : Development"));
                 resolve({"changes": statement.changes, "lastID": statement.lastID});
             });
         });
