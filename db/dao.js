@@ -20,7 +20,11 @@ class Database {
     get(sql, args) {
         return new Promise((resolve, reject) => {
             this.connection.get(sql, args, (err, row) => {
-                console.log(row);
+                //If the result set is empty, the second parameter is undefined
+                if (err) {
+                    //SQL-like errors
+                    return reject(new Error("Unexpected error triggered : Development"));
+                }
                 resolve(row);
             })
         });
