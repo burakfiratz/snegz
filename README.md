@@ -1,6 +1,6 @@
 # snegz
 
-- Project Stack
+Project Stack
 - **S**QLite
 - **N**odeJS
 - **E**xpress
