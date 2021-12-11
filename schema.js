@@ -1,27 +1,10 @@
-const {GraphQLSchema, GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLFloat} = require("graphql");
-
-const connection = require('./db/dao');
-
-const Product = require("./entity/product");
+const {GraphQLSchema, GraphQLObjectType, GraphQLString} = require("graphql");
 
 const {userQueries, userMutations} = require('./graphql/user');
-
-let productType = new GraphQLObjectType({
-    name: 'Product',
-    fields: () => ({
-        id: {type: GraphQLInt},
-        name: {type: GraphQLString},
-        description: {type: GraphQLString},
-        price: {type: GraphQLFloat},
-        stock: {type: GraphQLInt},
-        created_at: {type: GraphQLString},
-        modified_at: {type: GraphQLString},
-        deleted_at: {type: GraphQLString},
-    })
-});
+const {productQueries, productMutations} = require('./graphql/product');
 
 
-var queryType = new GraphQLObjectType({
+const queryType = new GraphQLObjectType({
     name: 'Query',
     fields: {
         hello: {
@@ -30,46 +13,19 @@ var queryType = new GraphQLObjectType({
                 return "Hello World!";
             }
         },
-        getProduct: {
-            type: productType,
-            args: {
-                id: {type: GraphQLInt}
-            },
-            resolve: async (_, args) => {
-                return await connection.get('SELECT * FROM products WHERE id=?', [args.id]).then(async result => {
-                    return new Product(result)
-                });
-            }
-        },
-        ...userQueries
+
+        ...userQueries,
+        ...productQueries,
     }
 });
 
-var mutationType = new GraphQLObjectType({
+const mutationType = new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
-        setProduct: {
-            type: productType,
-            args: {
-                user_id: {type: GraphQLInt},
-                name: {type: GraphQLString},
-                description: {type: GraphQLString},
-                price: {type: GraphQLFloat},
-                stock: {type: GraphQLInt}
-            },
-            resolve: async (_, args) => {
-                return await connection.run('INSERT INTO products (user_id, name, description, price, stock) VALUES (?,?,?,?,?)',
-                    [args.user_id, args.name, args.description, args.price, args.stock]).then(async result => {
-                    console.log(result.lastID);
-                    return await connection.get('SELECT * FROM products WHERE id=?', [result.lastID]).then(result => {
-                        return new Product(result)
-                    });
-                });
-            }
-        },
-        ...userMutations
+        ...userMutations,
+        ...productMutations,
     })
-})
+});
 
 
 module.exports = new GraphQLSchema({query: queryType, mutation: mutationType});

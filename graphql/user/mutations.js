@@ -1,6 +1,6 @@
 const {GraphQLString} = require("graphql");
 const connection = require("./../../db/dao");
-const User = require("./../../entity/user");
+const User = require("../../controllers/user");
 const userType = require('./typedef');
 
 const userMutations = {
