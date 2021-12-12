@@ -1,6 +1,6 @@
 const {GraphQLInt} = require("graphql");
-const connection = require("./../../db/dao");
 const User = require("../../controllers/user");
+const UserModel = new (require("../../models/user"));
 const userType = require('./typedef');
 
 const userQueries = {
@@ -10,9 +10,13 @@ const userQueries = {
             id: {type: GraphQLInt}
         },
         resolve: async (_, args) => {
-            return await connection.get('SELECT * FROM users WHERE id=?', [args.id]).then(async result => {
-                return new User(result);
-            });
+            return await UserModel.getUserById(args.id)
+                .then((res) => {
+                    return new User(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     },
 };
