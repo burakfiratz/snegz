@@ -1,6 +1,7 @@
 const {GraphQLString} = require("graphql");
 const connection = require("./../../db/dao");
 const User = require("../../controllers/user");
+const UserModel = new (require("../../models/user"));
 const userType = require('./typedef');
 
 const userMutations = {
@@ -11,14 +12,13 @@ const userMutations = {
             email: {type: GraphQLString}
         },
         resolve: async (_, args) => {
-            return await connection.run('INSERT INTO users (username, email) VALUES (?,?)', [args.username, args.email]).then(async result => {
-                console.log(result.lastID);
-                return await connection.get('SELECT * FROM users WHERE id=?', [result.lastID]).then(result => {
-                    console.log(result);
-                    console.log(new User(result));
-                    return new User(result);
+            return await UserModel.setUser(args)
+                .then((res) => {
+                    return new User(res);
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
-            });
         }
     }
 }
