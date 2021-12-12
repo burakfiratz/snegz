@@ -1,11 +1,11 @@
 const {GraphQLInt, GraphQLString, GraphQLFloat} = require("graphql");
 const Product = require("../../controllers/product");
 const ProductModel = new (require("../../models/product"));
-const productType = require("./typedef");
+const {ProductTypeDef} = require("./typedef");
 
 const productMutations = {
     setProduct: {
-        type: productType,
+        type: ProductTypeDef,
         args: {
             user_id: {type: GraphQLInt},
             name: {type: GraphQLString},

@@ -30,6 +30,15 @@ class Database {
         });
     }
 
+    all(sql, args) {
+        return new Promise((resolve, reject) => {
+            this.connection.all(sql, args, (err, rows) => {
+                console.log(rows);
+                resolve(rows);
+            });
+        });
+    }
+
     connectionClose() {
         return new Promise((resolve, reject) => {
             this.connection.close(err => {

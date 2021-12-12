@@ -1,13 +1,12 @@
 const {GraphQLInt} = require("graphql");
 const Product = require("../../controllers/product");
 const ProductModel = new (require("../../models/product"));
-const productType = require('./typedef');
-
+const {ProductTypeDef} = require('./typedef');
 
 const productQueries = {
     getProduct: {
         description: "Get product entities by product id",
-        type: productType,
+        type: ProductTypeDef,
         args: {
             id: {type: GraphQLInt}
         },
