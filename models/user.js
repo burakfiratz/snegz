@@ -6,7 +6,7 @@ class UserModel {
             return connection.get('SELECT * FROM users WHERE id=?', [id])
                 .then(async result => {
                     if (typeof result === "undefined") {
-                        reject("No records found");
+                        reject("No records found no:3");
                     }
                     resolve(result);
                 }).catch(async err => {
