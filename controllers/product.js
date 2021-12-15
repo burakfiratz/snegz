@@ -1,6 +1,7 @@
 class Product {
     constructor(product) {
         this.id = product.id;
+        this.user_id = product.user_id;
         this.name = product.name;
         this.description = product.description;
         this.price = product.price;

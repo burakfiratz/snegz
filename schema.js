@@ -2,6 +2,7 @@ const {GraphQLSchema, GraphQLObjectType, GraphQLString} = require("graphql");
 
 const {productQueries, productMutations} = require('./graphql/product');
 const {userQueries, userMutations} = require('./graphql/user');
+const {orderQueries, orderMutations} = require('./graphql/order');
 
 
 const queryType = new GraphQLObjectType({
@@ -13,17 +14,20 @@ const queryType = new GraphQLObjectType({
                 return "Hello World!";
             }
         },
-
-        ...userQueries,
         ...productQueries,
+        ...userQueries,
+        ...orderQueries,
+
     }
 });
 
 const mutationType = new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
-        ...userMutations,
         ...productMutations,
+        ...userMutations,
+        ...orderMutations,
+
     })
 });
 

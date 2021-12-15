@@ -7,7 +7,7 @@ class ProductModel {
             return connection.get('SELECT * FROM products WHERE id=?', [id])
                 .then(async result => {
                     if (typeof result === "undefined") {
-                        reject("No records found");
+                        reject("No records found no: 1");
                     }
                     resolve(result);
                 })
@@ -37,10 +37,8 @@ class ProductModel {
             return connection.all('SELECT * FROM products WHERE user_id=?', [userId])
                 .then(async result => {
                     if (typeof result === "undefined") {
-                        reject("No records found");
+                        reject("No records found no: 2");
                     }
-                    console.log("getUserProducts")
-                    console.log(result);
                     resolve(result);
                 })
                 .catch(async err => {
