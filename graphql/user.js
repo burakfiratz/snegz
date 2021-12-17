@@ -1,4 +1,4 @@
-const {GraphQLInt, GraphQLString, GraphQLList} = require("graphql");
+const {GraphQLInt, GraphQLString, GraphQLList, GraphQLNonNull} = require("graphql");
 const {UserTypeDef} = require('../typedefs');
 const UserModel = new (require('../models/user'));
 const User = require('../controllers/user');
@@ -8,10 +8,10 @@ const userQueries = {
         description: "Get user entities by user id",
         type: UserTypeDef,
         args: {
-            id: {type: GraphQLInt}
+            userId: {type: new GraphQLNonNull(GraphQLInt)}
         },
         resolve: async (_, args) => {
-            return await UserModel.getUserById(args.id)
+            return await UserModel.getUserById(args.userId)
                 .then((res) => {
                     return new User(res);
                 })
@@ -47,8 +47,8 @@ const userMutations = {
         description: "Create a new user(username, e-mail)",
         type: UserTypeDef,
         args: {
-            username: {type: GraphQLString},
-            email: {type: GraphQLString}
+            username: {type: new GraphQLNonNull(GraphQLString)},
+            email: {type: new GraphQLNonNull(GraphQLString)}
         },
         resolve: async (_, args) => {
             return await UserModel.setUser(args)

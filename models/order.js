@@ -15,7 +15,7 @@ class OrderModel {
         });
     }
 
-    getOrders(){
+    getOrders() {
         return new Promise((resolve, reject) => {
             return connection.all('SELECT * FROM orders')
                 .then(async result => {
@@ -31,7 +31,7 @@ class OrderModel {
 
     setOrder(args) {
         return new Promise((resolve, reject) => {
-            return connection.run('INSERT INTO orders (user_id, amount) VALUES (?,?)', [args.user_id, args.amount])
+            return connection.run('INSERT INTO orders (user_id, amount) VALUES (?,?)', [args.userId, args.amount])
                 .then(async result => {
                     return await connection.get('SELECT * FROM orders WHERE id=?', [result.lastID]).then(result => {
                         resolve(result);
@@ -43,15 +43,14 @@ class OrderModel {
     }
 
 
-
-    getUserOrders(user_id){
+    getUserOrders(userId) {
         return new Promise((resolve, reject) => {
-            return connection.all('SELECT * FROM orders WHERE user_id=?', [user_id])
-                .then(async result => {
-                    if (typeof result === "undefined") {
+            return connection.all('SELECT * FROM orders WHERE user_id=?', [userId])
+                .then(async rows => {
+                    if (typeof rows === "undefined") {
                         reject("No records found no:5");
                     }
-                    resolve(result);
+                    resolve(rows);
                 }).catch(async err => {
                     reject(err.message);
                 });

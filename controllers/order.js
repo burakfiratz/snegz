@@ -1,10 +1,10 @@
 class Order {
     constructor(order) {
         this.id = order.id;
-        this.user_id = order.user_id;
+        this.userId = order.user_id;
         this.amount = order.amount;
-        this.tracking_number = order.tracking_number;
-        this.created_at = order.created_at;
+        this.trackingNumber = order.tracking_number;
+        this.createdAt = order.created_at;
     }
 }
 

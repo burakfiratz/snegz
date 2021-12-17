@@ -1,4 +1,4 @@
-const {GraphQLInt, GraphQLFloat, GraphQLList} = require("graphql");
+const {GraphQLInt, GraphQLFloat, GraphQLList, GraphQLNonNull} = require("graphql");
 const {OrderTypeDef} = require('../typedefs');
 const OrderModel = new (require('../models/order'));
 const Order = require('../controllers/order');
@@ -8,10 +8,10 @@ const orderQueries = {
         description: "Get order entities by order id",
         type: OrderTypeDef,
         args: {
-            id: {type: GraphQLInt}
+            orderId: {type: new GraphQLNonNull(GraphQLInt)}
         },
         resolve: async (_, args) => {
-            return await OrderModel.getOrderById(args.id)
+            return await OrderModel.getOrderById(args.orderId)
                 .then((res) => {
                     return new Order(res);
                 })
@@ -24,6 +24,7 @@ const orderQueries = {
         description: "Get all orders entities",
         type: new GraphQLList(OrderTypeDef),
         //TODO: add sorting, filtering, paging
+
         /*        args: {
                     id: {type: GraphQLInt}
                 },*/
@@ -45,8 +46,8 @@ const orderMutations = {
         description: "Create a new order to user",
         type: OrderTypeDef,
         args: {
-            user_id: {type: GraphQLInt},
-            amount: {type: GraphQLFloat}
+            userId: {type: new GraphQLNonNull(GraphQLInt)},
+            amount: {type: new GraphQLNonNull(GraphQLFloat)}
         },
         resolve: async (_, args) => {
             return await OrderModel.setOrder(args)

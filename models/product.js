@@ -19,7 +19,7 @@ class ProductModel {
 
     getProducts(args) {
         return new Promise((resolve, reject) => {
-            return connection.all('SELECT * FROM products',)
+            return connection.all('SELECT * FROM products')
                 .then(async result => {
                     if (typeof result === "undefined") {
                         reject("No records found no: 6");
@@ -35,7 +35,7 @@ class ProductModel {
     setProduct(args) {
         return new Promise((resolve, reject) => {
             return connection.run('INSERT INTO products (user_id, name, description, price, stock) VALUES (?,?,?,?,?)',
-                [args.user_id, args.name, args.description, args.price, args.stock])
+                [args.userId, args.name, args.description, args.price, args.stock])
                 .then(async result => {
                     return await connection.get('SELECT * FROM products WHERE id=?', [result.lastID]).then(async result => {
                         resolve(result);
