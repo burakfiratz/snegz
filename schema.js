@@ -7,6 +7,7 @@ const {orderQueries, orderMutations} = require('./graphql/order');
 
 const queryType = new GraphQLObjectType({
     name: 'Query',
+    description: 'Available fields: order, orders, product, products, user, users',
     fields: {
         hello: {
             type: GraphQLString,
@@ -14,19 +15,21 @@ const queryType = new GraphQLObjectType({
                 return "Hello World!";
             }
         },
+        ...orderQueries,
         ...productQueries,
         ...userQueries,
-        ...orderQueries,
+
 
     }
 });
 
 const mutationType = new GraphQLObjectType({
     name: 'Mutation',
+    description: 'Available fields: setOrder, setProduct, setUser',
     fields: () => ({
+        ...orderMutations,
         ...productMutations,
         ...userMutations,
-        ...orderMutations,
 
     })
 });

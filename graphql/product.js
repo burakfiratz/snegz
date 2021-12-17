@@ -1,4 +1,4 @@
-const {GraphQLInt, GraphQLString, GraphQLFloat} = require("graphql");
+const {GraphQLInt, GraphQLString, GraphQLFloat, GraphQLList} = require("graphql");
 const {ProductTypeDef} = require('../typedefs');
 const ProductModel = new (require('../models/product'));
 const Product = require('../controllers/product');
@@ -20,10 +20,30 @@ const productQueries = {
                 });
         }
     },
+    products: {
+        description: "Get all products entities",
+        type: new GraphQLList(ProductTypeDef),
+        //TODO: add sorting, filtering, paging
+/*        args: {
+            id: {type: GraphQLInt}
+        },*/
+        resolve: async (_, args) => {
+            return await ProductModel.getProducts(args)
+                .then((res) => {
+                    return res.map(product => {
+                        return new Product(product);
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    },
 }
 
 const productMutations = {
     setProduct: {
+        description: "Create a new product to user",
         type: ProductTypeDef,
         args: {
             user_id: {type: GraphQLInt},
