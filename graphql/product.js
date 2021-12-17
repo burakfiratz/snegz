@@ -1,4 +1,4 @@
-const {GraphQLInt, GraphQLString, GraphQLFloat, GraphQLList} = require("graphql");
+const {GraphQLInt, GraphQLString, GraphQLFloat, GraphQLList, GraphQLNonNull} = require("graphql");
 const {ProductTypeDef} = require('../typedefs');
 const ProductModel = new (require('../models/product'));
 const Product = require('../controllers/product');
@@ -8,10 +8,10 @@ const productQueries = {
         description: "Get product entities by product id",
         type: ProductTypeDef,
         args: {
-            id: {type: GraphQLInt}
+            productId: {type: new GraphQLNonNull(GraphQLInt)}
         },
         resolve: async (_, args) => {
-            return await ProductModel.getProductById(args.id)
+            return await ProductModel.getProductById(args.productId)
                 .then((res) => {
                     return new Product(res);
                 })
@@ -24,9 +24,10 @@ const productQueries = {
         description: "Get all products entities",
         type: new GraphQLList(ProductTypeDef),
         //TODO: add sorting, filtering, paging
-/*        args: {
-            id: {type: GraphQLInt}
-        },*/
+
+        /*        args: {
+                    id: {type: GraphQLInt}
+                },*/
         resolve: async (_, args) => {
             return await ProductModel.getProducts(args)
                 .then((res) => {
@@ -46,11 +47,11 @@ const productMutations = {
         description: "Create a new product to user",
         type: ProductTypeDef,
         args: {
-            user_id: {type: GraphQLInt},
-            name: {type: GraphQLString},
-            description: {type: GraphQLString},
-            price: {type: GraphQLFloat},
-            stock: {type: GraphQLInt}
+            userId: {type: new GraphQLNonNull(GraphQLInt)},
+            name: {type: new GraphQLNonNull(GraphQLString)},
+            description: {type: new GraphQLNonNull(GraphQLString)},
+            price: {type: new GraphQLNonNull(GraphQLFloat)},
+            stock: {type: new GraphQLNonNull(GraphQLInt)}
         },
         resolve: async (_, args) => {
             return await ProductModel.setProduct(args)
