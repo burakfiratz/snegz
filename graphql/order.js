@@ -5,6 +5,7 @@ const Order = require('../controllers/order');
 
 const orderQueries = {
     order: {
+        description: "Get order entities by order id",
         type: OrderTypeDef,
         args: {
             id: {type: GraphQLInt}
@@ -20,7 +21,12 @@ const orderQueries = {
         }
     },
     orders: {
+        description: "Get all orders entities",
         type: new GraphQLList(OrderTypeDef),
+        //TODO: add sorting, filtering, paging
+        /*        args: {
+                    id: {type: GraphQLInt}
+                },*/
         resolve: async (_) => {
             return await OrderModel.getOrders()
                 .then((res) => {
@@ -36,6 +42,7 @@ const orderQueries = {
 
 const orderMutations = {
     setOrder: {
+        description: "Create a new order to user",
         type: OrderTypeDef,
         args: {
             user_id: {type: GraphQLInt},

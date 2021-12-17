@@ -15,6 +15,20 @@ class UserModel {
         });
     }
 
+    getUsers(args) {
+        return new Promise((resolve, reject) => {
+            return connection.all('SELECT * FROM users')
+                .then(async result => {
+                    if (typeof result === "undefined") {
+                        reject("No records found no:7");
+                    }
+                    resolve(result);
+                }).catch(async err => {
+                    reject(err.message);
+                });
+        });
+    }
+
     setUser(args) {
         return new Promise((resolve, reject) => {
             return connection.run('INSERT INTO users (username, email) VALUES (?,?)', [args.username, args.email])

@@ -17,6 +17,21 @@ class ProductModel {
         });
     }
 
+    getProducts(args) {
+        return new Promise((resolve, reject) => {
+            return connection.all('SELECT * FROM products',)
+                .then(async result => {
+                    if (typeof result === "undefined") {
+                        reject("No records found no: 6");
+                    }
+                    resolve(result);
+                })
+                .catch(async err => {
+                    reject(err.message);
+                });
+        });
+    }
+
     setProduct(args) {
         return new Promise((resolve, reject) => {
             return connection.run('INSERT INTO products (user_id, name, description, price, stock) VALUES (?,?,?,?,?)',
