@@ -26,7 +26,7 @@ const orderQueries = {
         type: new GraphQLList(OrderTypeDef),
         //TODO: add filtering
         args: {
-            page: {type: orderPaginationInputType}, //for paging
+            page: {type: orderPaginationInputType}, //for pagination
             sort: {type: orderSortInputType}, //for sorting
         },
         resolve: async (_, args) => {
