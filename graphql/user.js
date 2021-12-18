@@ -2,6 +2,7 @@ const {GraphQLInt, GraphQLString, GraphQLList, GraphQLNonNull} = require("graphq
 const {UserTypeDef} = require('../typedefs');
 const UserModel = new (require('../models/user'));
 const User = require('../controllers/user');
+const {paginationInputType, userSortInputType} = require("../collatedefs");
 
 const userQueries = {
     user: {
@@ -23,10 +24,11 @@ const userQueries = {
     users: {
         description: "Get all users entities",
         type: new GraphQLList(UserTypeDef),
-        //TODO: add sorting, filtering, paging
-        /*args: {
-            id: {type: GraphQLInt}
-        },*/
+        //TODO: add filtering
+        args: {
+            page: {type: paginationInputType}, //for pagination
+            sort: {type: userSortInputType}, //for sorting
+        },
         resolve: async (_, args) => {
             return await UserModel.getUsers(args)
                 .then((users) => {

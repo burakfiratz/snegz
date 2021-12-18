@@ -36,6 +36,7 @@ const UserTypeDef = new GraphQLObjectType({
         id: {type: GraphQLInt},
         username: {type: GraphQLString},
         email: {type: GraphQLString},
+        createdAt: {type: GraphQLString},
         products: {
             type: new GraphQLList(ProductTypeDef),
             resolve: async (parent) => {

@@ -1,18 +1,19 @@
 const {GraphQLEnumType, GraphQLInputObjectType, GraphQLNonNull} = require("graphql");
 const {directionEnumType} = require('./common');
-const orderSortFieldEnum = new GraphQLEnumType({
-    name: "OrderSortFieldEnum",
+const productSortFieldEnum = new GraphQLEnumType({
+    name: "ProductSortFieldEnum",
     values: {
-        AMOUNT: {value: 'amount'},
+        PRICE: {value: 'price'},
         CREATED_AT: {value: 'created_at'},
+        STOCK: {value: 'stock'},
     }
 });
 
-let orderSortInputType = new GraphQLInputObjectType({
-    name: "OrderSort",
+let productSortInputType = new GraphQLInputObjectType({
+    name: "ProductSort",
     fields: () => ({
         field: {
-            type: new GraphQLNonNull(orderSortFieldEnum),
+            type: new GraphQLNonNull(productSortFieldEnum),
         },
         direction: {
             type: new GraphQLNonNull(directionEnumType)
@@ -21,5 +22,5 @@ let orderSortInputType = new GraphQLInputObjectType({
 });
 
 module.exports = {
-    orderSortInputType
+    productSortInputType
 };

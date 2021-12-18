@@ -3,6 +3,7 @@ class User {
         this.id = user.id;
         this.username = user.username;
         this.email = user.email;
+        this.createdAt = user.created_at;
     }
 }
 

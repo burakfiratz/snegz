@@ -2,6 +2,7 @@ const {GraphQLInt, GraphQLString, GraphQLFloat, GraphQLList, GraphQLNonNull} = r
 const {ProductTypeDef} = require('../typedefs');
 const ProductModel = new (require('../models/product'));
 const Product = require('../controllers/product');
+const {paginationInputType, productSortInputType} = require("../collatedefs");
 
 const productQueries = {
     product: {
@@ -23,11 +24,11 @@ const productQueries = {
     products: {
         description: "Get all products entities",
         type: new GraphQLList(ProductTypeDef),
-        //TODO: add sorting, filtering, paging
-
-        /*        args: {
-                    id: {type: GraphQLInt}
-                },*/
+        //TODO: add filtering
+        args: {
+            page: {type: paginationInputType}, //for pagination
+            sort: {type: productSortInputType}, //for sorting
+        },
         resolve: async (_, args) => {
             return await ProductModel.getProducts(args)
                 .then((products) => {
