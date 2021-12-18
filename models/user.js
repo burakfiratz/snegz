@@ -1,4 +1,5 @@
 const connection = require("./../db/dao");
+const CollateDef = require("./collatedef");
 
 class UserModel {
     getUserById(id) {
@@ -16,18 +17,7 @@ class UserModel {
     }
 
     getUsers(args) {
-        let limit = 10, offset = 0;
-        if (args.page) {
-            limit = (args.page.limit > 10) ? 10 : ((args.page.limit < 0) ? 1 : args.page.limit || 10);
-            offset = (args.page.offset > 10) ? 10 : ((args.page.offset < 0) ? 0 : args.page.offset || 0);
-        }
-        let field = 'created_at', direction = 'DESC';
-        if (args.sort) {
-            field = args.sort.field;
-            direction = args.sort.direction;
-        }
-        let orderByStatement = ` ORDER BY ${field} ${direction} `;
-
+        let [limit, offset, orderByStatement] = new CollateDef().getProperties(args);
         return new Promise((resolve, reject) => {
             return connection.all(`SELECT *
                                    FROM users ${orderByStatement}
