@@ -1,5 +1,5 @@
-const {orderPaginationInputType, orderSortInputType} = require('./collatedefs/order');
+const {paginationInputType, orderSortInputType} = require('./collatedefs/order');
 module.exports = {
-    orderPaginationInputType,
+    paginationInputType,
     orderSortInputType
 };

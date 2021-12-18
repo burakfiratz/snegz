@@ -1,5 +1,5 @@
 const {GraphQLEnumType, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull} = require("graphql");
-const {directionEnumType} = require('./common');
+const {directionEnumType, paginationInputType} = require('./common');
 const orderSortFieldEnum = new GraphQLEnumType({
     name: "OrderSortFieldEnum",
     values: {
@@ -8,6 +8,7 @@ const orderSortFieldEnum = new GraphQLEnumType({
     }
 });
 
+/*
 let orderPaginationInputType = new GraphQLInputObjectType({
     name: "OrderPagination",
     fields: () => ({
@@ -21,6 +22,7 @@ let orderPaginationInputType = new GraphQLInputObjectType({
         }
     })
 });
+*/
 
 let orderSortInputType = new GraphQLInputObjectType({
     name: "OrderSort",
@@ -35,6 +37,6 @@ let orderSortInputType = new GraphQLInputObjectType({
 });
 
 module.exports = {
-    orderPaginationInputType,
+    paginationInputType,
     orderSortInputType
 };

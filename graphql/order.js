@@ -2,7 +2,7 @@ const {GraphQLInt, GraphQLFloat, GraphQLList, GraphQLNonNull} = require("graphql
 const {OrderTypeDef} = require('../typedefs');
 const OrderModel = new (require('../models/order'));
 const Order = require('../controllers/order');
-const {orderPaginationInputType, orderSortInputType} = require('../collatedefs');
+const {paginationInputType, orderSortInputType} = require('../collatedefs');
 
 const orderQueries = {
     order: {
@@ -26,7 +26,7 @@ const orderQueries = {
         type: new GraphQLList(OrderTypeDef),
         //TODO: add filtering
         args: {
-            page: {type: orderPaginationInputType}, //for pagination
+            page: {type: paginationInputType}, //for pagination
             sort: {type: orderSortInputType}, //for sorting
         },
         resolve: async (_, args) => {
