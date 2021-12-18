@@ -30,8 +30,8 @@ const productQueries = {
                 },*/
         resolve: async (_, args) => {
             return await ProductModel.getProducts(args)
-                .then((res) => {
-                    return res.map(product => {
+                .then((products) => {
+                    return products.map(product => {
                         return new Product(product);
                     })
                 })

@@ -2,6 +2,7 @@ const {GraphQLInt, GraphQLFloat, GraphQLList, GraphQLNonNull} = require("graphql
 const {OrderTypeDef} = require('../typedefs');
 const OrderModel = new (require('../models/order'));
 const Order = require('../controllers/order');
+const {orderPaginationInputType, orderSortInputType} = require('../collatedefs');
 
 const orderQueries = {
     order: {
@@ -23,15 +24,17 @@ const orderQueries = {
     orders: {
         description: "Get all orders entities",
         type: new GraphQLList(OrderTypeDef),
-        //TODO: add sorting, filtering, paging
-
-        /*        args: {
-                    id: {type: GraphQLInt}
-                },*/
-        resolve: async (_) => {
-            return await OrderModel.getOrders()
-                .then((res) => {
-                    return res;
+        //TODO: add filtering
+        args: {
+            page: {type: orderPaginationInputType}, //for paging
+            sort: {type: orderSortInputType}, //for sorting
+        },
+        resolve: async (_, args) => {
+            return await OrderModel.getOrders(args)
+                .then((orders) => {
+                    return orders.map(order => {
+                        return new Order(order);
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
