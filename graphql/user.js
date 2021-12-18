@@ -29,8 +29,8 @@ const userQueries = {
         },*/
         resolve: async (_, args) => {
             return await UserModel.getUsers(args)
-                .then((res) => {
-                    return res.map(user => {
+                .then((users) => {
+                    return users.map(user => {
                         return new User(user);
                     });
                 })
