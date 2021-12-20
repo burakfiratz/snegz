@@ -18,6 +18,9 @@ class OrderModel {
 
     getOrders(args) {
         return new Promise((resolve, reject) => {
+            console.log(args);
+            console.log(args.filter.amount);
+            console.log(args.filter.created_at);
             let [limit, offset, orderByStatement] = new CollateDef().getProperties(args);
             return connection.all(`SELECT *
                                    FROM orders ${orderByStatement}
