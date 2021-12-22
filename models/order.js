@@ -18,12 +18,30 @@ class OrderModel {
 
     getOrders(args) {
         return new Promise((resolve, reject) => {
-            console.log(args);
-            console.log(args.filter.amount);
-            console.log(args.filter.created_at);
+            args = JSON.parse(JSON.stringify(args));
+            let whereStatement = ``;
+            if (args.filter) {
+
+                if (args.filter.amount) {
+                    whereStatement = ` amount = '${args.filter.amount[0].EQ}' `;
+                }
+
+                if (args.filter.created_at) {
+                    whereStatement = ` '${args.filter.created_at[0].GT}' >= created_at AND created_at <= '${args.filter.created_at[0].LT}' `;
+                }
+                console.log(args);
+                /*console.log(args.filter.amount);
+                console.log(args.filter.amount[0]);
+                console.log(args.filter.amount[0].EQ);*/
+                console.log(args.filter.created_at);
+                console.log(args.filter.created_at.GT);
+                console.log(args.filter.created_at.LT);
+            }
+            if (whereStatement !== null)
+                whereStatement = ` WHERE ` + whereStatement;
             let [limit, offset, orderByStatement] = new CollateDef().getProperties(args);
             return connection.all(`SELECT *
-                                   FROM orders ${orderByStatement}
+                                   FROM orders ${whereStatement} ${orderByStatement}
                                    LIMIT ? OFFSET ?`, [limit, offset])
                 .then(async result => {
                     if (typeof result === "undefined") {

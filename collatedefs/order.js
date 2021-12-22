@@ -8,6 +8,14 @@ const {
 } = require("graphql");
 const {directionEnumType} = require('./common');
 
+const operators = new GraphQLInputObjectType({
+    name: "OrderFilterFieldEnum",
+    fields: () => ({
+        OR: {type: operators},
+        AND: {type: operators},
+    })
+});
+
 const orderFilterFieldEnum = new GraphQLEnumType({
     name: "OrderFilterFieldEnum",
     values: {
