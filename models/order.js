@@ -19,25 +19,33 @@ class OrderModel {
     getOrders(args) {
         return new Promise((resolve, reject) => {
             args = JSON.parse(JSON.stringify(args));
-            let whereStatement = ``;
+            let whereStatements = [],
+                whereStatement = ``;
+            console.log(args);
             if (args.filter) {
-
-                if (args.filter.amount) {
-                    whereStatement = ` amount = '${args.filter.amount[0].EQ}' `;
+                //AND or OR
+                let operator = Object.keys(args.filter)[0];
+                if (args.filter[operator]) {
+                    console.log("args.filter.AND");
+                    console.log(Object.keys(args.filter[operator][0]).length);
+                    for (let filterName of Object.keys(args.filter[operator][0])) {
+                        console.log(filterName + " -> " + args.filter[operator][0][filterName])
+                        console.log(args.filter[operator][0][filterName][0])
+                        if (args.filter[operator][0][filterName][0].EQ) {
+                            whereStatements.push(` ${filterName} = '${args.filter[operator][0][filterName][0].EQ}' `);
+                        }
+                        if (args.filter[operator][0][filterName][0].GT) {
+                            whereStatements.push(` '${args.filter[operator][0][filterName][0].GT}' >= ${filterName} `);
+                        }
+                        if (args.filter[operator][0][filterName][0].LT) {
+                            whereStatements.push(` ${filterName} <= '${args.filter[operator][0][filterName][0].LT}' `);
+                        }
+                    }
+                    whereStatement = whereStatements.join(` ${operator} `);
                 }
-
-                if (args.filter.created_at) {
-                    whereStatement = ` '${args.filter.created_at[0].GT}' >= created_at AND created_at <= '${args.filter.created_at[0].LT}' `;
-                }
-                console.log(args);
-                /*console.log(args.filter.amount);
-                console.log(args.filter.amount[0]);
-                console.log(args.filter.amount[0].EQ);*/
-                console.log(args.filter.created_at);
-                console.log(args.filter.created_at.GT);
-                console.log(args.filter.created_at.LT);
             }
-            if (whereStatement !== null)
+            console.log(whereStatement);
+            if (whereStatement !== ``)
                 whereStatement = ` WHERE ` + whereStatement;
             let [limit, offset, orderByStatement] = new CollateDef().getProperties(args);
             return connection.all(`SELECT *

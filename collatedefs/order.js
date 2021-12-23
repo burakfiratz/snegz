@@ -9,7 +9,7 @@ const {
 const {directionEnumType} = require('./common');
 
 const operators = new GraphQLInputObjectType({
-    name: "OrderFilterFieldEnum",
+    name: "OrderFilterOperators",
     fields: () => ({
         OR: {type: operators},
         AND: {type: operators},
@@ -36,15 +36,18 @@ let orderFilterInputTypes = new GraphQLInputObjectType({
         EQ: {type: GraphQLString},
         GT: {type: GraphQLString},
         LT: {type: GraphQLString},
-        /*direction: {type: new GraphQLNonNull(directionEnumType)}*/
+        OR: {type: new GraphQLList(orderFilterInputTypes)},
+        AND: {type: new GraphQLList(orderFilterInputTypes)},
+        amount: {type: new GraphQLList(orderFilterInputTypes)},
+        created_at: {type: new GraphQLList(orderFilterInputTypes)},
     })
 });
 
 let orderFilterInputType = new GraphQLInputObjectType({
     name: "OrderFilter",
     fields: () => ({
-        amount: {type: new GraphQLList(orderFilterInputTypes)},
-        created_at: {type: new GraphQLList(orderFilterInputTypes)},
+        OR: {type: new GraphQLList(orderFilterInputTypes)},
+        AND: {type: new GraphQLList(orderFilterInputTypes)},
         /*direction: {type: new GraphQLNonNull(directionEnumType)}*/
     })
 });
